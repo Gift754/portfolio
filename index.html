@@ -35,10 +35,7 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
+   
   }
 
   /* ─── CURSOR ─── */
@@ -904,20 +901,6 @@
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
-
-<script>
-  document.addEventListener('contextmenu', e => e.preventDefault());
-  document.addEventListener('keydown', e => {
-    if (
-      (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A')) ||
-      e.key === 'F12' ||
-      (e.ctrlKey && e.shiftKey && e.key === 'I')
-    ) {
-      e.preventDefault();
-    }
-  });
-</script>
-
 <script src="work-data.js"></script>
 </body>
 </html>
