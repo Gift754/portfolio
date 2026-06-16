@@ -80,6 +80,27 @@
   }
   .nav-links a:hover { color: var(--accent-bright); }
 
+  .nav-toggle {
+    display: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 12px;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    margin: 5px 0;
+    background: var(--ink);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  nav.expanded .nav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  nav.expanded .nav-toggle span:nth-child(2) { opacity: 0; }
+  nav.expanded .nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
   /* ─── HERO ─── */
   .hero {
     min-height: 100svh;
@@ -550,7 +571,34 @@
   /* ─── RESPONSIVE ─── */
   @media (max-width: 900px) {
     nav { padding: 16px 24px; }
-    .nav-links { gap: 20px; }
+    .nav-toggle { display: inline-flex; }
+    .nav-links {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      left: 0;
+      flex-direction: column;
+      gap: 16px;
+      padding: 24px;
+      background: rgba(13,13,15,0.98);
+      border-top: 1px solid var(--rule);
+      transform: translateY(-20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      z-index: 180;
+    }
+    nav.expanded .nav-links {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .nav-links a {
+      font-size: 14px;
+      text-align: center;
+      padding: 14px 0;
+      width: 100%;
+    }
     .hero { grid-template-columns: 1fr; }
     .hero-left { border-right: none; border-bottom: 1px solid var(--rule); padding: 64px 24px 48px; }
     .hero-right { padding: 40px 24px; }
@@ -580,6 +628,11 @@
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="#top">Gift<span>.</span></a>
+  <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
   <ul class="nav-links">
     <li><a href="#work">Work</a></li>
     <li><a href="#about">About</a></li>
@@ -899,6 +952,20 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  const nav = document.querySelector('nav');
+  const navToggle = document.querySelector('.nav-toggle');
+  navToggle?.addEventListener('click', () => {
+    const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+    navToggle.setAttribute('aria-expanded', String(!expanded));
+    nav.classList.toggle('expanded');
+  });
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('expanded');
+      navToggle?.setAttribute('aria-expanded', 'false');
+    });
+  });
 </script>
 <script src="work-data.js"></script>
 </body>
